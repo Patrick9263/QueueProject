@@ -36,14 +36,22 @@ body {
     border: 1px solid black;
 }
 
-#results {
+#resultsContainer {
     border: 1px solid orange;
     text-align: right;
-    margin-left: 50px;
+    margin-left: 25px;
 }
 
-#resultValues {
+.results {
+    padding-bottom: 15px;
+}
+
+#resultValuesContainer {
     text-align: left;
     border: 1px solid purple;
     margin-left: 25px;
+}
+
+.resultValues {
+    padding-bottom: 15px;
 }
