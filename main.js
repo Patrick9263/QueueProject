@@ -6,7 +6,14 @@ let win
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({ width: 800, height: 600 })
+  win = new BrowserWindow({ 
+    width: 1300,
+    height: 720,
+    minHeight: 720,
+    minWidth: 1300,
+    // icon: __dirname + 'assets/icons/electronicon.ico')
+    // frame: false
+  })
 
   // and load the index.html of the app.
   win.loadFile('index.html')

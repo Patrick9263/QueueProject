@@ -1,13 +1,71 @@
 <!DOCTYPE html>
-<html>
+
+<html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <h1>Hello World!</h1>
-    We are using node <script>document.write(process.versions.node)</script>,
-    Chrome <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
+    <div class="main center" id="app">
+
+      <div id="parameters">
+        <p><input placeholder="Lambda" oninput="this.className = ''" /></p>
+        <p><input placeholder="Mu" oninput="this.className = ''" /></p>
+        <p><input placeholder="Rho" oninput="this.className = ''" /></p>
+        <p><input placeholder="P_0" oninput="this.className = ''" /></p>
+
+        <button
+          type="button"
+          class="btn btn-success btn-lg"
+          v-on:click="admin('addAdmin')"
+        >
+          Run
+        </button>
+      </div>
+
+      <div id="results">
+          <div class="noselect" id="L">
+            L = 1 / rho
+          </div>
+          <div class="noselect" id="RT">
+            RT = E[s] / (1-rho)
+          </div>
+          <div class="noselect" id="L_q">
+            L_q = (rho^2) / (1-rho)
+          </div>
+          <div class="noselect" id="WT">
+            WT = (E[s] * rho) / (1-rho)
+          </div>
+      </div>
+
+      <div id="resultValues">
+          <div class="noselect">
+            = placeHolder
+          </div>
+          <div class="noselect">
+            = placeHolder
+          </div>
+          <div class="noselect">
+            = placeHolder
+          </div>
+          <div class="noselect">
+            = placeHolder
+          </div>
+      </div>
+      
+
+    </div>
+
+    <script type="text/javascript " src="vue.js "></script>
+    <script type="text/javascript " src="vuex.js "></script>
+    <script type="text/javascript " src="store.js "></script>
+    <script type="text/javascript " src="index.js "></script>
   </body>
 </html>
