@@ -8,7 +8,8 @@ let app = new Vue({
   methods: {
 
     setResult: function(elementID, text) {
-      document.getElementById(elementID).innerHTML = "= " + text;
+      // document.getElementById(elementID).innerHTML = "= " + text;
+      document.getElementById(elementID).insertAdjacentHTML('beforeend', " = " + text);
     },
 
     calculate: function() {
@@ -28,10 +29,10 @@ let app = new Vue({
         var L = rho / P0;
         var WT = (Es * rho) / P0;
 
-        this.setResult("Lresult", (1 / rho));
-        this.setResult("LqResult", Lq);
-        this.setResult("RTresult", RT);
-        this.setResult("WTresult", WT);
+        this.setResult("L", Es.toFixed(4));
+        this.setResult("RT", Lq.toFixed(4));
+        this.setResult("L_q", RT.toFixed(4));
+        this.setResult("WT", WT.toFixed(4));
       }
 
       // If not, we need BOTH lambda and mu
@@ -44,10 +45,10 @@ let app = new Vue({
         var L = rho / P0;
         var WT = (Es * rho) / P0;
 
-        this.setResult("Lresult", (1 / rho));
-        this.setResult("LqResult", Lq);
-        this.setResult("RTresult", RT);
-        this.setResult("WTresult", WT);
+        this.setResult("L", Es.toFixed(4));
+        this.setResult("RT", Lq.toFixed(4));
+        this.setResult("L_q", RT.toFixed(4));
+        this.setResult("WT", WT.toFixed(4));
       }
 
       // Otherwise yell at the user
