@@ -10,9 +10,10 @@ function createWindow () {
     width: 1300,
     height: 720,
     minHeight: 720,
-    minWidth: 1300,
+    minWidth: 1300
     // icon: __dirname + 'assets/icons/electronicon.ico')
     // frame: false
+    
   })
 
   // and load the index.html of the app.

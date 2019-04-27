@@ -36,5 +36,8 @@
       "unicode": false,
       "artifactName": "queueproject${version}.exe"
     }
+  },
+  "dependencies": {
+    "bootstrap": "^4.3.1"
   }
 }
