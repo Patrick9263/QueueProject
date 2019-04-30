@@ -50,13 +50,14 @@
         <input placeholder="Mu" id="mu" />
         <input placeholder="Rho" id="rho" />
         <input placeholder="n" id="n" style="display: none;" />
+        <input placeholder="m" id="m" style="display: none;" />
       </div>
 
       <button
         type="button"
         class="btn btn-success btn-lg"
         id="runButton"
-        @click="calculate()"
+        @click="getResults()"
       >
         Run
       </button>
