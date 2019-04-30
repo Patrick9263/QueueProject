@@ -14,7 +14,7 @@ let app = new Vue({
       }
     },
 
-    setupResults: function() {
+    initalizeResults: function() {
       let q = document.getElementById("queueType").value;
       if (q == "M/M/1") {
         this.toggle("n", "off");
@@ -31,21 +31,24 @@ let app = new Vue({
       }
     },
 
-    setResult: function(elementID, text) {
-      // document.getElementById(elementID).innerHTML = "= " + text;
-      document
-        .getElementById(elementID)
-        .insertAdjacentHTML("beforeend", " = " + text);
-    },
-
     clearResults: function() {
+        document.getElementById("paramError").innerHTML = "";
         var elements = document.getElementById("resultsContainer").childNodes;
         for (var i = 0; i < elements.length; i++) {
             elements[i].innerHTML = elements[i].id;
         }
     },
 
-    calculate: function(lambda, mu, rho, n) {
+    setResults: function(results) {
+      this.clearResults();
+      var elements = document.getElementById("resultsContainer").childNodes;
+      for (var i = 0; i <= Math.floor(elements.length / 2); i++) {
+         document.getElementById(elements[i*2].id).insertAdjacentHTML("beforeend", " = " + results[i].toFixed(4));
+      }
+    },
+
+    calculate: function(lambda, mu, rho, n, m) {
+      
         // If we have rho, we don't need anything else...
         if (rho) {
           var P0 = 1 - rho;
@@ -55,12 +58,8 @@ let app = new Vue({
           var L = rho / P0;
           var WT = (Es * rho) / P0;
 
-          this.clearResults();
-          this.setResult("P_0", P0.toFixed(4));
-          this.setResult("L", Es.toFixed(4));
-          this.setResult("RT", Lq.toFixed(4));
-          this.setResult("L_q", RT.toFixed(4));
-          this.setResult("WT", WT.toFixed(4));
+          var results = [P0, L, Es, Lq, RT, WT];
+          this.setResults(results);
         }
 
         // If not, we need BOTH lambda and mu
@@ -73,11 +72,8 @@ let app = new Vue({
           var L = rho / P0;
           var WT = (Es * rho) / P0;
 
-          this.setResult("P_0", P0.toFixed(4));
-          this.setResult("L", Es.toFixed(4));
-          this.setResult("RT", Lq.toFixed(4));
-          this.setResult("L_q", RT.toFixed(4));
-          this.setResult("WT", WT.toFixed(4));
+          var results = [P0, L, Es, Lq, RT, WT];
+          this.setResults(results);
         }
 
         // Otherwise yell at the user
@@ -88,23 +84,26 @@ let app = new Vue({
     },
 
     getResults: function() {
-      // Grab the parameters from the text fields
-      document.getElementById("paramError").innerHTML = "";
+
+      // Grab the parameters from the text fields...
       var lambda = document.getElementById("lambda").value;
       var mu = document.getElementById("mu").value;
       var rho = document.getElementById("rho").value;
       var n = document.getElementById("n").value;
+      var m = document.getElementById("m").value;
 
+      // Determine which functions to used based on the queue type...
       let q = document.getElementById("queueType").value;
       if (q == "M/M/1") {
           this.calculate(lambda, mu, rho);
       } else if (q == "M/M/n") {
           this.calculate(lambda, mu, rho, n);
       } else if (q == "M/M/n/m") {
-          this.calculate(lambda, mu, rho, n);
+          this.calculate(lambda, mu, rho, n, m);
       } else if (q == "M/G/1") {
           this.calculate(lambda, mu, rho);
       }
+
     }
   }
 });
