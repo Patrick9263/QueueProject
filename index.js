@@ -99,8 +99,11 @@ let app = new Vue({
       if (q == "M/M/1") {
           this.calculate(lambda, mu, rho);
       } else if (q == "M/M/n") {
+          this.calculate(lambda, mu, rho, n);
       } else if (q == "M/M/n/m") {
+          this.calculate(lambda, mu, rho, n);
       } else if (q == "M/G/1") {
+          this.calculate(lambda, mu, rho);
       }
     }
   }
