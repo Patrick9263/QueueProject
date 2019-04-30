@@ -48,13 +48,11 @@ let app = new Vue({
     },
 
     setError: function(message) {
-        document.getElementById("paramError").innerHTML =
-          "<b>" + message + "</b>";
+        document.getElementById("paramError").innerHTML = message;
     },
 
     isNull: function(parameter) {
         if (parameter.length == 0) {
-            console.log("param is null");
             return true;
         }
         else {
@@ -63,62 +61,87 @@ let app = new Vue({
     },
 
     checkParameters: function(q, lambda, mu, rho, n, m) {
-        console.log("Checking parameters...");
-
         if (q == "M/M/1") {
             if ( this.isNull(rho) && (this.isNull(lambda) || this.isNull(mu)) ) {
                 this.setError("Must supply rho, or both lambda AND mu");
+                return -1;
             }
         }
         else if (q == "M/M/n") {
-            console.log("M/M/n");
-            if ( this.isNull(rho) || (this.isNull(lambda) || this.isNull(mu) || this.isNull(n)) ) {
-                console.log("Setting error...");
+            if ( this.isNull(n) ||
+                (this.isNull(rho) && (this.isNull(lambda) || this.isNull(mu)))){
                 this.setError("Must supply n and either rho or BOTH lambda AND mu");
+                return -1;
             }
-        } else if ( (q == "M/M/n/m") || this.isNull(rho) ) {
-
-            if ( this.isNull(lambda) || this.isNull(mu) || this.isNull(n) || this.isNull(m) ) {
+        } else if ( (q == "M/M/n/m")) {
+            if ( this.isNull(n) ||
+                 this.isNull(m) ||
+                ( this.isNull(rho) && (this.isNull(lambda) || this.isNull(mu)))) {
                 this.setError("Must supply n,m and either rho or BOTH lambda AND mu");
+                return -1;
             }
         } else if ( (q == "M/G/1") || this.isNull(rho) ) {
-
             if (this.isNull(lambda) || this.isNull(mu)) {
                 this.setError("Must supply rho, or both lambda AND mu");
+                return -1;
             }
         }
+
+        return 0;
+    },
+
+    calcMM1: function(q, lambda, mu, rho, n, m) {
+      if (this.checkParameters(q, lambda, mu, rho, n, m) == -1) {
+          return;
+      }
+      // If we have rho, we don't need anything else...
+      else if (rho) {
+        var P0 = 1 - rho;
+        var Es = 1 / rho;
+        var RT = Es / P0;
+        var Lq = Math.pow(rho, 2) / P0;
+        var L = rho / P0;
+        var WT = (Es * rho) / P0;
+
+        var results = [P0, L, Es, Lq, RT, WT];
+        this.setResults(results);
+      }
+
+      // If not, we need BOTH lambda and mu
+      else if (lambda && mu) {
+        var rho = lambda / mu;
+        var P0 = 1 - rho;
+        var Es = 1 / rho;
+        var RT = Es / P0;
+        var Lq = Math.pow(rho, 2) / P0;
+        var L = rho / P0;
+        var WT = (Es * rho) / P0;
+
+        var results = [P0, L, Es, Lq, RT, WT];
+        this.setResults(results);
+      }
+    },
+
+    calcMMn: function(q, lambda, mu, rho, n, m) {
+        if (this.checkParameters(q, lambda, mu, rho, n, m) == -1) {
+          return;
+        }
+
+        else if (rho && n) {
+          var Pn =
+        }
+
+        else if (lambda && mu && n) {
+
+        }
+    },
+
+    calcMMnm: function(q, lambda, mu, rho, n, m) {
 
     },
 
-    calculate: function(q, lambda, mu, rho, n, m) {
-
-        this.checkParameters(q, lambda, mu, rho, n, m);
-        // If we have rho, we don't need anything else...
-        if (rho) {
-          var P0 = 1 - rho;
-          var Es = 1 / rho;
-          var RT = Es / P0;
-          var Lq = Math.pow(rho, 2) / P0;
-          var L = rho / P0;
-          var WT = (Es * rho) / P0;
-
-          var results = [P0, L, Es, Lq, RT, WT];
-          this.setResults(results);
-        }
-
-        // If not, we need BOTH lambda and mu
-        else if (lambda && mu) {
-          var rho = lambda / mu;
-          var P0 = 1 - rho;
-          var Es = 1 / rho;
-          var RT = Es / P0;
-          var Lq = Math.pow(rho, 2) / P0;
-          var L = rho / P0;
-          var WT = (Es * rho) / P0;
-
-          var results = [P0, L, Es, Lq, RT, WT];
-          this.setResults(results);
-        }
+    calcMG1: function(q, lambda, mu, rho, n, m) {
+        
     },
 
     getResults: function() {
@@ -133,11 +156,11 @@ let app = new Vue({
       // Determine which functions to used based on the queue type...
       let q = document.getElementById("queueType").value;
       if (q == "M/M/1") {
-          this.calculate(q, lambda, mu, rho);
+          this.calcMM1(q, lambda, mu, rho);
       } else if (q == "M/M/n") {
-          this.calculate(q, lambda, mu, rho, n);
+          this.calcMMn(q, lambda, mu, rho, n);
       } else if (q == "M/M/n/m") {
-          this.calculate(q, lambda, mu, rho, n, m);
+          this.calcMMnm(q, lambda, mu, rho, n, m);
       } else if (q == "M/G/1") {
           this.calculate(q, lambda, mu, rho);
       }
