@@ -5,48 +5,64 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-
     <div class="main center" id="app">
+      <select id="queueType" @change="setupResults()">
+        <option value="M/M/1" selected>M/M/1</option>
+        <option value="M/M/n">M/M/n</option>
+        <option value="M/M/n/m">M/M/n/m</option>
+        <option value="M/G/1">M/G/1</option>
+      </select>
+
       <div id="resultsContainer">
+        <div class="noselect results" id="P_0">
+          P_0
+        </div>
         <div class="noselect results" id="L">
           L
         </div>
         <div class="noselect results" id="RT">
           RT
         </div>
-        <div class="noselect results" id="L_q">
-          L_q
-        </div>
         <div class="noselect results" id="WT">
           WT
         </div>
-    </div>
-
+        <div class="noselect results" id="L_q">
+          L_q
+        </div>
+        <div class="noselect results" id="L_s">
+          L_s
+        </div>
+      </div>
 
       <div id="parameters">
-        <input placeholder="Lambda" id="lambda">
-        <input placeholder="Mu" id="mu">
-        <input placeholder="Rho" id="rho">
+        <input placeholder="Lambda" id="lambda" />
+        <input placeholder="Mu" id="mu" />
+        <input placeholder="Rho" id="rho" />
+        <input placeholder="n" id="n" style="display: none;" />
       </div>
 
       <button
-          type="button"
-          class="btn btn-success btn-lg"
-          id="runButton"
-          @click="calculate()"
-        >
-          Run
-        </button>
+        type="button"
+        class="btn btn-success btn-lg"
+        id="runButton"
+        @click="calculate()"
+      >
+        Run
+      </button>
     </div>
     <div id="paramError" class="center" style="color: red;"></div>
 
-    
     <script type="text/javascript " src="vue.js "></script>
     <script type="text/javascript " src="vuex.js "></script>
     <script type="text/javascript " src="store.js "></script>
