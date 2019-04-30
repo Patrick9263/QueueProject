@@ -14,7 +14,7 @@ let app = new Vue({
       }
     },
 
-    initalizeResults: function() {
+    initalizeIO: function() {
       let q = document.getElementById("queueType").value;
       if (q == "M/M/1") {
         this.toggle("n", "off");
@@ -47,8 +47,52 @@ let app = new Vue({
       }
     },
 
-    calculate: function(lambda, mu, rho, n, m) {
-      
+    setError: function(message) {
+        document.getElementById("paramError").innerHTML =
+          "<b>" + message + "</b>";
+    },
+
+    isNull: function(parameter) {
+        if (parameter.length == 0) {
+            console.log("param is null");
+            return true;
+        }
+        else {
+            return false;
+        }
+    },
+
+    checkParameters: function(q, lambda, mu, rho, n, m) {
+        console.log("Checking parameters...");
+
+        if (q == "M/M/1") {
+            if ( this.isNull(rho) && (this.isNull(lambda) || this.isNull(mu)) ) {
+                this.setError("Must supply rho, or both lambda AND mu");
+            }
+        }
+        else if (q == "M/M/n") {
+            console.log("M/M/n");
+            if ( this.isNull(rho) || (this.isNull(lambda) || this.isNull(mu) || this.isNull(n)) ) {
+                console.log("Setting error...");
+                this.setError("Must supply n and either rho or BOTH lambda AND mu");
+            }
+        } else if ( (q == "M/M/n/m") || this.isNull(rho) ) {
+
+            if ( this.isNull(lambda) || this.isNull(mu) || this.isNull(n) || this.isNull(m) ) {
+                this.setError("Must supply n,m and either rho or BOTH lambda AND mu");
+            }
+        } else if ( (q == "M/G/1") || this.isNull(rho) ) {
+
+            if (this.isNull(lambda) || this.isNull(mu)) {
+                this.setError("Must supply rho, or both lambda AND mu");
+            }
+        }
+
+    },
+
+    calculate: function(q, lambda, mu, rho, n, m) {
+
+        this.checkParameters(q, lambda, mu, rho, n, m);
         // If we have rho, we don't need anything else...
         if (rho) {
           var P0 = 1 - rho;
@@ -75,12 +119,6 @@ let app = new Vue({
           var results = [P0, L, Es, Lq, RT, WT];
           this.setResults(results);
         }
-
-        // Otherwise yell at the user
-        else {
-          document.getElementById("paramError").innerHTML =
-            "<b>Must supply rho, or both lambda AND mu</b>";
-        }
     },
 
     getResults: function() {
@@ -95,13 +133,13 @@ let app = new Vue({
       // Determine which functions to used based on the queue type...
       let q = document.getElementById("queueType").value;
       if (q == "M/M/1") {
-          this.calculate(lambda, mu, rho);
+          this.calculate(q, lambda, mu, rho);
       } else if (q == "M/M/n") {
-          this.calculate(lambda, mu, rho, n);
+          this.calculate(q, lambda, mu, rho, n);
       } else if (q == "M/M/n/m") {
-          this.calculate(lambda, mu, rho, n, m);
+          this.calculate(q, lambda, mu, rho, n, m);
       } else if (q == "M/G/1") {
-          this.calculate(lambda, mu, rho);
+          this.calculate(q, lambda, mu, rho);
       }
 
     }

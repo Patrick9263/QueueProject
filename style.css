@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Varela+Round");
 html,
 body {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     overflow-x: hidden;
     height: 100%;
     background: rgb(249, 253, 255);
@@ -32,11 +32,11 @@ body {
 }
 
 #parameters {
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
 #resultsContainer {
-    border: 2px solid orange;
+    /* border: 2px solid orange; */
     text-align: center;
 }
 
