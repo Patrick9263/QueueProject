@@ -26,22 +26,22 @@
 
       <div id="resultsContainer">
         <div class="noselect results" id="P_0">
-          P_0
+          P_0 = {{ P0 }}
         </div>
         <div class="noselect results" id="L">
-          L
+          L = {{ L }}
         </div>
         <div class="noselect results" id="RT">
-          RT
+          RT = {{ RT }}
         </div>
         <div class="noselect results" id="WT">
-          WT
+          WT = {{ WT }}
         </div>
         <div class="noselect results" id="L_q">
-          L_q
+          L_q = {{ Lq }}
         </div>
         <div class="noselect results" id="L_s">
-          L_s
+          L_s = {{ Ls }}
         </div>
       </div>
 
@@ -61,8 +61,8 @@
       >
         Run
       </button>
+      <div id="paramError" class="center" style="color: red;"><b>{{ error }}</b></div>
     </div>
-    <div id="paramError" class="center" style="color: red;"></div>
 
     <script type="text/javascript " src="vue.js "></script>
     <script type="text/javascript " src="vuex.js "></script>
