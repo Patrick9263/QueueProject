@@ -22,6 +22,7 @@
         <option value="M/M/n">M/M/n</option>
         <option value="M/M/n/m">M/M/n/m</option>
         <option value="M/G/1">M/G/1</option>
+        <option value="Multi M/M/1">Multi M/M/1</option>
       </select>
 
       <div id="resultsContainer">
@@ -46,6 +47,21 @@
         <div class="noselect results" id="L_s">
           L_s = {{ Ls }}
         </div>
+        <div class="noselect results" id="ProPow" style="display: none;">
+          Processing Power = {{ ProPow }}
+        </div>
+        <div class="noselect results" id="EpS" style="display: none;">
+          Service Time = {{ EpS }}
+        </div>
+        <div class="noselect results" id="RT1" style="display: none;">
+          Service Time Q1 = {{ RT1 }}
+        </div>
+        <div class="noselect results" id="RT21" style="display: none;">
+          Service Time Q21 = {{ RT21 }}
+        </div>
+        <div class="noselect results" id="RT22" style="display: none;">
+          Service Time Q22 = {{ RT22 }}
+        </div>
       </div>
 
       <div id="parameters">
@@ -55,6 +71,15 @@
         <input placeholder="n" id="n" style="display: none;" />
         <input placeholder="m" id="m" style="display: none;" />
         <input placeholder="Coefficient of Variation" id="cv" style="display: none;" />
+
+        <input placeholder="Q1Lambda" id="Q1L" style="display: none;" />
+        <input placeholder="Q1Mu" id="Q1Mu" style="display: none;" />
+        <input placeholder="Q21 Probabilities" id="Q21Prob" style="display: none;" />
+        <input placeholder="Q21 Mu" id="Q21Mu" style="display: none;" />
+        <input placeholder="Q21Lambda" id="Q21L" style="display: none;" />
+        <input placeholder="Q22 Probabilities" id="Q22Prob" style="display: none;" />
+        <input placeholder="Q22 Mu" id="Q22Mu" style="display: none;" />
+        <input placeholder="Q22Lambda" id="Q22L" style="display: none;" />
       </div>
 
       <button
