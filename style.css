@@ -25,14 +25,23 @@ body {
 }
 
 .main {
-    border: 1px solid blue;
-    margin: 5% 35% 0px 35%;
+    /* border: 1px solid blue; */
+    margin: 10px 0 10px 0;
     display: flex;
     flex-direction: column;
 }
 
+#queueType {
+  width: 25%;
+}
+
 #parameters {
     /* border: 1px solid black; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 #resultsContainer {

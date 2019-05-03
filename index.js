@@ -22,7 +22,7 @@ let app = new Vue({
     toggle: function(theID, status) {
       let x = document.getElementById(theID);
       if (status === "on") {
-        x.style.display = "inline-block";
+        x.style.display = "block";
       } else {
         x.style.display = "none";
       }
@@ -40,17 +40,10 @@ let app = new Vue({
       }
     },
 
-    toggleOnBlock: function(theIDs) {
-      for (var i = 0; i < theIDs.length; i++) {
-        let x = document.getElementById(theIDs[i]);
-        x.style.display = "block";
-      }
-    },
-
     initalizeIO: function() {
       allParams = ["lambda", "mu", "rho", "n", "m", "cv"];
       allOutputs = ["P_0", "P_n", "L", "RT", "WT", "L_q", "L_s"];
-      multiQParams = ["Q1L", "Q1Mu", "Q21Prob", "Q21Mu", "Q21L", "Q22Prob", "Q22Mu", "Q22L"];
+      multiQParams = ["Q1L", "Q1Mu", "Q21Prob", "Q21Mu", "Q22Prob", "Q22Mu"];
       multiQOutput = ["ProPow", "RT1", "RT21", "RT22"];
       Object.freeze(allParams);
       Object.freeze(allOutputs);
@@ -58,7 +51,7 @@ let app = new Vue({
       Object.freeze(multiQOutput);
 
       let q = document.getElementById("queueType").value;
-      this.toggleOnBlock([...allParams, ...allOutputs]);
+      this.toggleOn([...allParams, ...allOutputs]);
       this.toggleOff([...multiQParams, ...multiQOutput]);
       if (q == "M/M/1") {
         this.toggleOff(["n", "m", "cv", "P_n"]);
@@ -102,6 +95,18 @@ let app = new Vue({
                 app.error ="Must supply sigma, lambda, and mu";
                 return -1;
             }
+        } else if (q == "Multi M/M/1") {
+          if ( isNull(lambda) ||
+                   isNull(mu) ||
+                   isNull(rho)||
+                   isNull(n)  ||
+                   isNull(m)  ||
+                   isNull(cv)
+             )
+          {
+            app.error = "Must provide all parameters!";
+            return -1;
+          }
         }
 
         return 0;
@@ -224,18 +229,34 @@ let app = new Vue({
         else if (lambda && mu && cv) {
             let rho = lambda / mu;
             let sig = Math.pow(cv, 2) * Math.pow(mu, 2);
-            app.Lq = ((Math.pow(lambda, 2) * Math.pow(sig, 2)) + Math.pow(rho, 2)) / (2 * (1-rho)).toFixed(4);
-            app.WT = app.Lq / lambda;
-            app.RT = app.WT + (1 / mu);
-            app.L = lambda * app.RT;
-            app.P0 = 1-rho;
-            app.Ls = app.L - app.Lq;
+            app.Lq = (((Math.pow(lambda, 2) * Math.pow(sig, 2)) + Math.pow(rho, 2)) / (2 * (1-rho))).toFixed(4);
+            app.WT = (app.Lq / lambda);
+            app.RT = (app.WT + (1 / mu)).toFixed(4);
+            app.L = (lambda * app.RT).toFixed(4);
+            app.P0 = (1-rho).toFixed(4);
+            app.Ls = (app.L - app.Lq).toFixed(4);
         }
     },
 
-    calcMulti: function(Q1L, Q1Mu, Q21Prob, Q21Mu, Q21L, Q22Prob, Q22Mu, Q22L) {
-      if (Q1L, Q1Mu, Q21Prob, Q21Mu, Q21L, Q22Prob, Q22Mu, Q22L) {
+    calcMulti: function(q, Q1L, Q1Mu, Q21Prob, Q21Mu, Q22Prob, Q22Mu) {
+      if (this.checkParameters(q, Q1L, Q1Mu, Q21Prob, Q21Mu, Q22Prob, Q22Mu) == -1) {
+          return -1;
+      }
 
+      if (Q1L, Q1Mu, Q21Prob, Q21Mu, Q22Prob, Q22Mu) {
+        let Q21L = Q1L * Q21Prob;
+        let Q22L = Q1L * Q22Prob;
+        let Q1E = 1 / Q1Mu;
+        let Q21E = 1 / Q21Mu;
+        let Q22E = 1 / Q22Mu;
+        let rho21 = Q21L * Q21E * Math.pow(10, -6);
+        let rho22 = Q22L * Q22E * Math.pow(10, -6);
+
+        app.RT21 = (Q21E / (1-rho21)).toFixed(4);
+        app.RT22 = (Q22E / (1-rho22)).toFixed(4);
+        app.RT1 = (((Q21L * app.RT21) + (Q22L * app.RT22)) / Q1L).toFixed(4);
+        app.ProPow = (1 - rho21 - rho22).toFixed(4);
+        app.EpS = (Q1E / app.ProPow).toFixed(4);
       }
     },
 
@@ -253,30 +274,13 @@ let app = new Vue({
       var Q1Mu = document.getElementById("Q1Mu").value;
       var Q21Prob = document.getElementById("Q21Prob").value;
       var Q21Mu = document.getElementById("Q21Mu").value;
-      var Q21L = document.getElementById("Q21L").value;
       var Q22Prob = document.getElementById("Q22Prob").value;
       var Q22Mu = document.getElementById("Q22Mu").value;
-      var Q22L = document.getElementById("Q22L").value;
 
       // Make sure rho is a valid number...
       if ( (parseFloat(rho) <= 0) || (parseFloat(rho) > 1) ) {
           app.error = "Rho must be (0,1)";
           return -2;
-      }
-
-      if (!Q21Prob.includes(',') || !Q22Prob.includes(',')) {
-        let error = "Probabilities should be a comma separated list with \
-        spaces. Ex: 0.2, 0.4, 0.2, 0.2";
-        app.error = error;
-      }
-      else {
-        var Q21Prob = Q21Prob.split(',').map( (x) => { return parseFloat(x); });
-        var Q22Prob = Q22Prob.split(',').map( (x) => { return parseFloat(x); });
-        let sum1 = Q21Prob.reduce((a,b) => a+b, 0);
-        let sum2 = Q22Prob.reduce((a,b) => a+b, 0);
-        if ( (sum1 != 1) || (sum2 != 1) ) {
-          app.error = "Probabilities do not add up to 1!";
-        }
       }
 
       // Determine which functions to used based on the queue type...
@@ -290,8 +294,9 @@ let app = new Vue({
       } else if (q == "M/G/1") {
           this.calcMG1(q, lambda, mu, rho, 0, 0, cv);
       } else if (q == "Multi M/M/1") {
-        console.log();
-        this.calcMulti(Q1L, Q1Mu, Q21Prob, Q21Mu, Q21L, Q22Prob, Q22Mu, Q22L);
+        Q21Prob = parseFloat(Q21Prob);
+        Q22Prob = parseFloat(Q22Prob);
+        this.calcMulti(q, Q1L, Q1Mu, Q21Prob, Q21Mu, Q22Prob, Q22Mu);
       }
     }
   }

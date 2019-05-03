@@ -17,13 +17,15 @@
 
   <body>
     <div class="main center" id="app">
-      <select id="queueType" @change="initalizeIO()">
-        <option value="M/M/1" selected>M/M/1</option>
-        <option value="M/M/n">M/M/n</option>
-        <option value="M/M/n/m">M/M/n/m</option>
-        <option value="M/G/1">M/G/1</option>
-        <option value="Multi M/M/1">Multi M/M/1</option>
-      </select>
+      <center>
+        <select id="queueType" @change="initalizeIO()">
+          <option value="M/M/1" selected>M/M/1</option>
+          <option value="M/M/n">M/M/n</option>
+          <option value="M/M/n/m">M/M/n/m</option>
+          <option value="M/G/1">M/G/1</option>
+          <option value="Multi M/M/1">Multi M/M/1</option>
+        </select>
+      </center>
 
       <div id="resultsContainer">
         <div class="noselect results" id="P_0">
@@ -76,20 +78,22 @@
         <input placeholder="Q1Mu" id="Q1Mu" style="display: none;" />
         <input placeholder="Q21 Probabilities" id="Q21Prob" style="display: none;" />
         <input placeholder="Q21 Mu" id="Q21Mu" style="display: none;" />
-        <input placeholder="Q21Lambda" id="Q21L" style="display: none;" />
         <input placeholder="Q22 Probabilities" id="Q22Prob" style="display: none;" />
         <input placeholder="Q22 Mu" id="Q22Mu" style="display: none;" />
-        <input placeholder="Q22Lambda" id="Q22L" style="display: none;" />
       </div>
 
-      <button
-        type="button"
-        class="btn btn-success btn-lg"
-        id="runButton"
-        @click="getResults()"
-      >
-        Run
-      </button>
+      <center>
+        <button
+          type="button"
+          class="btn btn-success btn-lg"
+          id="runButton"
+          @click="getResults()"
+          >
+          Run
+        </button>
+      </center>
+
+      
       <div id="paramError" class="center" style="color: red;"><b>{{ error }}</b></div>
     </div>
 
